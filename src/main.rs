@@ -7,19 +7,35 @@ use egui_extras::RetainedImage;
 
 // #[derive(Default)]
 struct RTunes {
-    play_button: PlayImage,
+    toolbar_icon: ToolBarIcons,
 }
 
 impl App for RTunes {
     fn update(&mut self, ctx: &eframe::egui::Context, _frame: &mut eframe::Frame) {
-        let size = Vec2 { x: 50., y: 50. };
-        egui::CentralPanel::default().show(ctx, |ui| {
-            ui.heading("hello world");
-            // ui.add(egui::ImageButton::new(self.image.texture_id(ctx)));
-            ui.add(ImageButton::new(
-                self.play_button.image.texture_id(ctx),
-                size,
-            ))
+        let size = Vec2 { x: 25., y: 25. };
+        egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
+            ui.horizontal_top(|ui| {
+                ui.add(ImageButton::new(
+                    self.toolbar_icon.open_song.texture_id(ctx),
+                    size,
+                ));
+                ui.add(ImageButton::new(
+                    self.toolbar_icon.play_previous.texture_id(ctx),
+                    size,
+                ));
+                ui.add(ImageButton::new(
+                    self.toolbar_icon.play.texture_id(ctx),
+                    size,
+                ));
+                ui.add(ImageButton::new(
+                    self.toolbar_icon.play_next.texture_id(ctx),
+                    size,
+                ));
+                ui.add(ImageButton::new(
+                    self.toolbar_icon.pauze.texture_id(ctx),
+                    size,
+                ));
+            });
         });
     }
 }
@@ -27,20 +43,43 @@ impl App for RTunes {
 impl RTunes {
     fn new(cc: &eframe::CreationContext<'_>) -> Self {
         Self {
-            play_button: PlayImage::new(),
+            toolbar_icon: ToolBarIcons::new(),
         }
-        // Self::default()
     }
 }
 
-struct PlayImage {
-    image: RetainedImage,
+struct ToolBarIcons {
+    open_song: RetainedImage,
+    pauze: RetainedImage,
+    play: RetainedImage,
+    play_next: RetainedImage,
+    play_previous: RetainedImage,
 }
 
-impl PlayImage {
+impl ToolBarIcons {
     fn new() -> Self {
         Self {
-            image: RetainedImage::from_image_bytes(
+            open_song: RetainedImage::from_image_bytes(
+                "play-button.png",
+                include_bytes!("../assets/play-button.png"),
+            )
+            .unwrap(),
+            pauze: RetainedImage::from_image_bytes(
+                "play-button.png",
+                include_bytes!("../assets/play-button.png"),
+            )
+            .unwrap(),
+            play: RetainedImage::from_image_bytes(
+                "play-button.png",
+                include_bytes!("../assets/play-button.png"),
+            )
+            .unwrap(),
+            play_next: RetainedImage::from_image_bytes(
+                "play-button.png",
+                include_bytes!("../assets/play-button.png"),
+            )
+            .unwrap(),
+            play_previous: RetainedImage::from_image_bytes(
                 "play-button.png",
                 include_bytes!("../assets/play-button.png"),
             )
