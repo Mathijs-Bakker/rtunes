@@ -12,28 +12,28 @@ struct RTunes {
 
 impl App for RTunes {
     fn update(&mut self, ctx: &eframe::egui::Context, _frame: &mut eframe::Frame) {
-        let size = Vec2 { x: 25., y: 25. };
+        // let icon_size = Vec2 { x: 25., y: 25. };
         egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
             ui.horizontal_top(|ui| {
                 ui.add(ImageButton::new(
                     self.toolbar_icon.open_song.texture_id(ctx),
-                    size,
+                    self.toolbar_icon.size,
                 ));
                 ui.add(ImageButton::new(
                     self.toolbar_icon.play_previous.texture_id(ctx),
-                    size,
+                    self.toolbar_icon.size,
                 ));
                 ui.add(ImageButton::new(
                     self.toolbar_icon.play.texture_id(ctx),
-                    size,
+                    self.toolbar_icon.size,
                 ));
                 ui.add(ImageButton::new(
                     self.toolbar_icon.play_next.texture_id(ctx),
-                    size,
+                    self.toolbar_icon.size,
                 ));
                 ui.add(ImageButton::new(
                     self.toolbar_icon.pauze.texture_id(ctx),
-                    size,
+                    self.toolbar_icon.size,
                 ));
             });
         });
@@ -49,6 +49,7 @@ impl RTunes {
 }
 
 struct ToolBarIcons {
+    size: Vec2,
     open_song: RetainedImage,
     pauze: RetainedImage,
     play: RetainedImage,
@@ -59,6 +60,7 @@ struct ToolBarIcons {
 impl ToolBarIcons {
     fn new() -> Self {
         Self {
+            size: Vec2 { x: 25., y: 25. },
             open_song: RetainedImage::from_image_bytes(
                 "play-button.png",
                 include_bytes!("../assets/play-button.png"),
