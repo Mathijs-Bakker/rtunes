@@ -12,30 +12,38 @@ struct RTunes {
 
 impl App for RTunes {
     fn update(&mut self, ctx: &eframe::egui::Context, _frame: &mut eframe::Frame) {
-        // let icon_size = Vec2 { x: 25., y: 25. };
         egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
-            ui.horizontal_top(|ui| {
-                ui.add(ImageButton::new(
-                    self.toolbar_icon.open_song.texture_id(ctx),
-                    self.toolbar_icon.size,
-                ));
-                ui.add(ImageButton::new(
-                    self.toolbar_icon.play_previous.texture_id(ctx),
-                    self.toolbar_icon.size,
-                ));
-                ui.add(ImageButton::new(
-                    self.toolbar_icon.play.texture_id(ctx),
-                    self.toolbar_icon.size,
-                ));
-                ui.add(ImageButton::new(
-                    self.toolbar_icon.play_next.texture_id(ctx),
-                    self.toolbar_icon.size,
-                ));
-                ui.add(ImageButton::new(
-                    self.toolbar_icon.pauze.texture_id(ctx),
-                    self.toolbar_icon.size,
-                ));
-            });
+            egui::Grid::new("tool_bar")
+                .num_columns(3)
+                .min_col_width(140.)
+                .show(ui, |ui| {
+                    ui.label("");
+                    ui.horizontal(|ui| {
+                        ui.add(ImageButton::new(
+                            self.toolbar_icon.open_song.texture_id(ctx),
+                            self.toolbar_icon.size,
+                        ));
+                        ui.add(ImageButton::new(
+                            self.toolbar_icon.play_previous.texture_id(ctx),
+                            self.toolbar_icon.size,
+                        ));
+                        ui.add(ImageButton::new(
+                            self.toolbar_icon.play.texture_id(ctx),
+                            self.toolbar_icon.size,
+                        ));
+                        ui.add(ImageButton::new(
+                            self.toolbar_icon.play_next.texture_id(ctx),
+                            self.toolbar_icon.size,
+                        ));
+                        ui.add(ImageButton::new(
+                            self.toolbar_icon.pauze.texture_id(ctx),
+                            self.toolbar_icon.size,
+                        ));
+                    });
+                });
+
+            ui.label("");
+            ui.end_row();
         });
     }
 }
