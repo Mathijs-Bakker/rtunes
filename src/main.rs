@@ -3,7 +3,7 @@ use eframe::{
     epaint::Vec2,
     App,
 };
-use egui_extras::RetainedImage;
+use egui_extras::{RetainedImage, Size, StripBuilder};
 
 // #[derive(Default)]
 struct RTunes {
@@ -12,38 +12,53 @@ struct RTunes {
 
 impl App for RTunes {
     fn update(&mut self, ctx: &eframe::egui::Context, _frame: &mut eframe::Frame) {
-        egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
-            egui::Grid::new("tool_bar")
-                .num_columns(3)
-                .min_col_width(140.)
-                .show(ui, |ui| {
-                    ui.label("");
-                    ui.horizontal(|ui| {
-                        ui.add(ImageButton::new(
-                            self.toolbar_icon.open_song.texture_id(ctx),
-                            self.toolbar_icon.size,
-                        ));
-                        ui.add(ImageButton::new(
-                            self.toolbar_icon.play_previous.texture_id(ctx),
-                            self.toolbar_icon.size,
-                        ));
-                        ui.add(ImageButton::new(
-                            self.toolbar_icon.play.texture_id(ctx),
-                            self.toolbar_icon.size,
-                        ));
-                        ui.add(ImageButton::new(
-                            self.toolbar_icon.play_next.texture_id(ctx),
-                            self.toolbar_icon.size,
-                        ));
-                        ui.add(ImageButton::new(
-                            self.toolbar_icon.pauze.texture_id(ctx),
-                            self.toolbar_icon.size,
-                        ));
+        egui::TopBottomPanel::top("toolbar_panel").show(ctx, |ui| {
+            let n_toolbar_icons = 5.;
+            let horizontal_offset = 15.;
+            StripBuilder::new(ui)
+                .size(Size::remainder())
+                .size(Size::exact(
+                    (self.toolbar_icon.size.x + horizontal_offset) * n_toolbar_icons,
+                ))
+                .size(Size::remainder())
+                .horizontal(|mut strip| {
+                    strip.empty();
+                    strip.strip(|builder| {
+                        builder.sizes(Size::remainder(), 5).horizontal(|mut strip| {
+                            strip.cell(|ui| {
+                                ui.add(ImageButton::new(
+                                    self.toolbar_icon.open_song.texture_id(ctx),
+                                    self.toolbar_icon.size,
+                                ));
+                            });
+                            strip.cell(|ui| {
+                                ui.add(ImageButton::new(
+                                    self.toolbar_icon.play_previous.texture_id(ctx),
+                                    self.toolbar_icon.size,
+                                ));
+                            });
+                            strip.cell(|ui| {
+                                ui.add(ImageButton::new(
+                                    self.toolbar_icon.play.texture_id(ctx),
+                                    self.toolbar_icon.size,
+                                ));
+                            });
+                            strip.cell(|ui| {
+                                ui.add(ImageButton::new(
+                                    self.toolbar_icon.play_next.texture_id(ctx),
+                                    self.toolbar_icon.size,
+                                ));
+                            });
+                            strip.cell(|ui| {
+                                ui.add(ImageButton::new(
+                                    self.toolbar_icon.pauze.texture_id(ctx),
+                                    self.toolbar_icon.size,
+                                ));
+                            });
+                        });
                     });
+                    strip.empty();
                 });
-
-            ui.label("");
-            ui.end_row();
         });
     }
 }
