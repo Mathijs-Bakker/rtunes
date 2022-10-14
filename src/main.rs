@@ -8,12 +8,14 @@ use egui_extras::{RetainedImage, Size, StripBuilder};
 // #[derive(Default)]
 struct RTunes {
     toolbar_icon: ToolBarIcons,
+    player_state: PlayerState,
 }
 
 impl RTunes {
     fn new(cc: &eframe::CreationContext<'_>) -> Self {
         Self {
             toolbar_icon: ToolBarIcons::new(),
+            player_state: PlayerState::new(),
         }
     }
 }
@@ -50,16 +52,30 @@ impl App for RTunes {
                                     self.toolbar_icon.size,
                                 ));
                             });
+
+                            // Play button:
                             strip.cell(|ui| {
-                                if ui
-                                    .add(ImageButton::new(
-                                        self.toolbar_icon.play.texture_id(ctx),
-                                        self.toolbar_icon.size,
-                                    ))
-                                    .clicked()
-                                {
-                                    self.toolbar_icon.pauze.texture_id(ctx);
-                                };
+                                if !self.player_state.is_playing {
+                                    if ui
+                                        .add(ImageButton::new(
+                                            self.toolbar_icon.play.texture_id(ctx),
+                                            self.toolbar_icon.size,
+                                        ))
+                                        .clicked()
+                                    {
+                                        self.player_state.is_playing = true;
+                                    }
+                                } else {
+                                    if ui
+                                        .add(ImageButton::new(
+                                            self.toolbar_icon.pauze.texture_id(ctx),
+                                            self.toolbar_icon.size,
+                                        ))
+                                        .clicked()
+                                    {
+                                        self.player_state.is_playing = false;
+                                    }
+                                }
                             });
                             strip.cell(|ui| {
                                 ui.add(ImageButton::new(
@@ -78,6 +94,16 @@ impl App for RTunes {
                     strip.empty();
                 });
         });
+    }
+}
+
+struct PlayerState {
+    is_playing: bool,
+}
+
+impl PlayerState {
+    fn new() -> Self {
+        Self { is_playing: false }
     }
 }
 
