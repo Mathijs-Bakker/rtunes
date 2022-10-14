@@ -10,6 +10,14 @@ struct RTunes {
     toolbar_icon: ToolBarIcons,
 }
 
+impl RTunes {
+    fn new(cc: &eframe::CreationContext<'_>) -> Self {
+        Self {
+            toolbar_icon: ToolBarIcons::new(),
+        }
+    }
+}
+
 impl App for RTunes {
     fn update(&mut self, ctx: &eframe::egui::Context, _frame: &mut eframe::Frame) {
         egui::TopBottomPanel::top("toolbar_panel").show(ctx, |ui| {
@@ -26,10 +34,15 @@ impl App for RTunes {
                     strip.strip(|builder| {
                         builder.sizes(Size::remainder(), 5).horizontal(|mut strip| {
                             strip.cell(|ui| {
-                                ui.add(ImageButton::new(
-                                    self.toolbar_icon.open_song.texture_id(ctx),
-                                    self.toolbar_icon.size,
-                                ));
+                                if ui
+                                    .add(ImageButton::new(
+                                        self.toolbar_icon.open_song.texture_id(ctx),
+                                        self.toolbar_icon.size,
+                                    ))
+                                    .clicked()
+                                {
+                                    // *label_button_clicked = "clicked".to_string();
+                                };
                             });
                             strip.cell(|ui| {
                                 ui.add(ImageButton::new(
@@ -38,10 +51,15 @@ impl App for RTunes {
                                 ));
                             });
                             strip.cell(|ui| {
-                                ui.add(ImageButton::new(
-                                    self.toolbar_icon.play.texture_id(ctx),
-                                    self.toolbar_icon.size,
-                                ));
+                                if ui
+                                    .add(ImageButton::new(
+                                        self.toolbar_icon.play.texture_id(ctx),
+                                        self.toolbar_icon.size,
+                                    ))
+                                    .clicked()
+                                {
+                                    self.toolbar_icon.pauze.texture_id(ctx);
+                                };
                             });
                             strip.cell(|ui| {
                                 ui.add(ImageButton::new(
@@ -51,7 +69,7 @@ impl App for RTunes {
                             });
                             strip.cell(|ui| {
                                 ui.add(ImageButton::new(
-                                    self.toolbar_icon.pauze.texture_id(ctx),
+                                    self.toolbar_icon.stop.texture_id(ctx),
                                     self.toolbar_icon.size,
                                 ));
                             });
@@ -63,14 +81,6 @@ impl App for RTunes {
     }
 }
 
-impl RTunes {
-    fn new(cc: &eframe::CreationContext<'_>) -> Self {
-        Self {
-            toolbar_icon: ToolBarIcons::new(),
-        }
-    }
-}
-
 struct ToolBarIcons {
     size: Vec2,
     open_song: RetainedImage,
@@ -78,6 +88,7 @@ struct ToolBarIcons {
     play: RetainedImage,
     play_next: RetainedImage,
     play_previous: RetainedImage,
+    stop: RetainedImage,
 }
 
 impl ToolBarIcons {
@@ -85,13 +96,13 @@ impl ToolBarIcons {
         Self {
             size: Vec2 { x: 25., y: 25. },
             open_song: RetainedImage::from_image_bytes(
-                "play-button.png",
-                include_bytes!("../assets/play-button.png"),
+                "add-button.png",
+                include_bytes!("../assets/add-button.png"),
             )
             .unwrap(),
             pauze: RetainedImage::from_image_bytes(
-                "play-button.png",
-                include_bytes!("../assets/play-button.png"),
+                "pauze-button.png",
+                include_bytes!("../assets/pauze-button.png"),
             )
             .unwrap(),
             play: RetainedImage::from_image_bytes(
@@ -100,13 +111,18 @@ impl ToolBarIcons {
             )
             .unwrap(),
             play_next: RetainedImage::from_image_bytes(
-                "play-button.png",
-                include_bytes!("../assets/play-button.png"),
+                "next-button.png",
+                include_bytes!("../assets/next-button.png"),
             )
             .unwrap(),
             play_previous: RetainedImage::from_image_bytes(
-                "play-button.png",
-                include_bytes!("../assets/play-button.png"),
+                "previous-button.png",
+                include_bytes!("../assets/previous-button.png"),
+            )
+            .unwrap(),
+            stop: RetainedImage::from_image_bytes(
+                "stop-button.png",
+                include_bytes!("../assets/stop-button.png"),
             )
             .unwrap(),
         }
