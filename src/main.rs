@@ -54,29 +54,7 @@ impl App for RTunes {
                             });
 
                             // Play button:
-                            strip.cell(|ui| {
-                                if !self.player_state.is_playing {
-                                    if ui
-                                        .add(ImageButton::new(
-                                            self.toolbar_icon.play.texture_id(ctx),
-                                            self.toolbar_icon.size,
-                                        ))
-                                        .clicked()
-                                    {
-                                        self.player_state.is_playing = true;
-                                    }
-                                } else {
-                                    if ui
-                                        .add(ImageButton::new(
-                                            self.toolbar_icon.pauze.texture_id(ctx),
-                                            self.toolbar_icon.size,
-                                        ))
-                                        .clicked()
-                                    {
-                                        self.player_state.is_playing = false;
-                                    }
-                                }
-                            });
+                            self.play_button(&mut strip, ctx);
                             strip.cell(|ui| {
                                 ui.add(ImageButton::new(
                                     self.toolbar_icon.play_next.texture_id(ctx),
@@ -93,6 +71,34 @@ impl App for RTunes {
                     });
                     strip.empty();
                 });
+        });
+    }
+}
+
+impl RTunes {
+    fn play_button(&mut self, strip: &mut egui_extras::Strip, ctx: &egui::Context) {
+        strip.cell(|ui| {
+            if !self.player_state.is_playing {
+                if ui
+                    .add(ImageButton::new(
+                        self.toolbar_icon.play.texture_id(ctx),
+                        self.toolbar_icon.size,
+                    ))
+                    .clicked()
+                {
+                    self.player_state.is_playing = true;
+                }
+            } else {
+                if ui
+                    .add(ImageButton::new(
+                        self.toolbar_icon.pauze.texture_id(ctx),
+                        self.toolbar_icon.size,
+                    ))
+                    .clicked()
+                {
+                    self.player_state.is_playing = false;
+                }
+            }
         });
     }
 }
