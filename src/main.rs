@@ -2,7 +2,7 @@
 
 use eframe::epaint::Vec2;
 
-mod rtunes;
+mod player;
 
 mod toolbar;
 
@@ -15,6 +15,6 @@ fn main() {
     eframe::run_native(
         "RTunes",
         native_options,
-        Box::new(|cc| Box::new(rtunes::RTunes::new(cc))),
+        Box::new(|cc| Box::new(player::Player::new(cc))),
     );
 }

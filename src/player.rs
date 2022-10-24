@@ -16,20 +16,18 @@ use egui_extras::Size;
 use egui_extras::StripBuilder;
 
 // #[derive(Default)]
-pub(crate) struct RTunes {
+pub(crate) struct Player {
     pub(crate) toolbar_icon: toolbar::ToolBarIcons,
     pub(crate) player_state: PlayerState,
 }
 
-impl RTunes {}
-
-impl App for RTunes {
+impl App for Player {
     fn update(&mut self, ctx: &eframe::egui::Context, _frame: &mut eframe::Frame) {
         self.toolbar(ctx);
     }
 }
 
-impl RTunes {
+impl Player {
     pub(crate) fn new(cc: &eframe::CreationContext<'_>) -> Self {
         Self {
             toolbar_icon: toolbar::ToolBarIcons::new(),
@@ -92,17 +90,7 @@ impl RTunes {
 
     fn play_button(&mut self, strip: &mut egui_extras::Strip, ctx: &egui::Context) {
         strip.cell(|ui| {
-            if !self.player_state.is_playing {
-                if ui
-                    .add(ImageButton::new(
-                        self.toolbar_icon.play.texture_id(ctx),
-                        self.toolbar_icon.size,
-                    ))
-                    .clicked()
-                {
-                    self.player_state.is_playing = true;
-                }
-            } else {
+            if self.player_state.is_playing {
                 if ui
                     .add(ImageButton::new(
                         self.toolbar_icon.pauze.texture_id(ctx),
@@ -112,6 +100,14 @@ impl RTunes {
                 {
                     self.player_state.is_playing = false;
                 }
+            } else if ui
+                .add(ImageButton::new(
+                    self.toolbar_icon.play.texture_id(ctx),
+                    self.toolbar_icon.size,
+                ))
+                .clicked()
+            {
+                self.player_state.is_playing = true;
             }
         });
     }
